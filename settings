@@ -1,3 +1,4 @@
 {
-	"token": "<Discord Bot Token>"
+	"token": "<Discord Bot Token>",
+	"interval": 60000
 }
