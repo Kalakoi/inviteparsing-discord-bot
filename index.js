@@ -63,10 +63,10 @@ process.on("SIGTERM", exitHandler.bind(null, {exit:true}));
 process.on("uncaughtException", exitHandler.bind(null, {exit:true}));
 
 function tick() {
-	for (int i = 0; i < servers.length; i++) {
+	for (let i = 0; i < servers.length; i++) {
 		var server = servers[i];
 		var guildArray = bot.guilds.array();
-		for (int j = 0; j < guildArray.length; j++) {
+		for (let j = 0; j < guildArray.length; j++) {
 			if (guildArray[j].name == server.name) {
 				var newInviteLinks = [];
 				guildArray[j].fetchInvites().then((invites) => {
@@ -89,7 +89,7 @@ bot.on("guildMemberAdd", (member) => {
 		return;
 	}
 	member.guild.fetchInvites().then((invites) => {
-		for (int i = 0; i < invites.size; i++) {
+		for (let i = 0; i < invites.size; i++) {
 			newInviteLinks.push({
 				name: invites[i].code,
 				uses: invites[i].uses
@@ -100,7 +100,7 @@ bot.on("guildMemberAdd", (member) => {
 	let inviteLinks = server.inviteLinks;
 	
 	var potentialUsedInvites = [];
-	for (int i = 0; i < newInviteLinks.length; i++) {
+	for (let i = 0; i < newInviteLinks.length; i++) {
 		let inviteIndex = indexOfObjectByName(inviteLinks, newInviteLinks[i].name);
 		if (index == -1) {
 			potentialUsedInvites.push(newInviteLinks[i].name);
@@ -112,10 +112,10 @@ bot.on("guildMemberAdd", (member) => {
 	}
 	
 	var msg = "Member " + member.user.tag + " joined using invite:";
-	for (int i = 0; i < potentialUsedInvites.length; i++) {
+	for (let i = 0; i < potentialUsedInvites.length; i++) {
 		msg += "\n" + potentialUsedInvites[i];
 	}
-	for (int i = 0; i < server.discordChannels.length; i++) {
+	for (let i = 0; i < server.discordChannels.length; i++) {
 		member.guild.channels.find("name", server.discordChannels[i]).send(msg);
 	}
 	
@@ -126,7 +126,7 @@ bot.on("guildCreate", (guild) => {
 	let index = indexOfObjectByName(servers, guild.name);
 	if (index == -1) {
 		guild.fetchInvites().then((invites) => {
-			for (int i = 0; i < invites.size; i++) {
+			for (let i = 0; i < invites.size; i++) {
 				inviteLinks.push({
 					name: invites[i].code,
 					uses: invites[i].uses
@@ -163,7 +163,7 @@ bot.on("message", (message) => {
 		let index = indexOfObjectByName(servers, message.guild.name);
 		if(index == -1) {
 			message.guild.fetchInvites().then((invites) => {
-				for (int i = 0; i < invites.size; i++) {
+				for (let i = 0; i < invites.size; i++) {
 					inviteLinks.push({
 						name: invites[i].code,
 						uses: invites[i].uses
@@ -274,7 +274,7 @@ bot.on("ready", () => {
 		let index = indexOfObjectByName(servers, guildArray[i].name);
 		let inviteLinks = [];
 		guildArray[i].fetchInvites().then((invites) => {
-			for (int i = 0; i < invites.size; i++) {
+			for (let i = 0; i < invites.size; i++) {
 				inviteLinks.push({
 					name: invites[i].code,
 					uses: invites[i].uses
