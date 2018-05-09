@@ -23,14 +23,9 @@ function print(msg, err) {
 	
 	var timestamp = "[" + h + ":" + m + ":" + s + "]";
 	console.log(timestamp, msg);
-	
-	newLog = {time: timestamp, message: msg};
-	logs.push(newLog);
-	
+		
 	if(err) {
 		console.log(err);
-		errLog = {time: timestamp, message: err};
-		logs.push(errLog);
 	}
 }
 
