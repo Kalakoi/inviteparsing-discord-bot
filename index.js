@@ -65,9 +65,10 @@ function tick() {
 			if (guildArray[j].name == server.name) {
 				var newInviteLinks = [];
 				guildArray[j].fetchInvites().then((invites) => {
+					let inviteArray = invites.array();
 					newInviteLinks.push({
-						name: invites[i].code,
-						uses: invites[i].uses
+						name: inviteArray[i].code,
+						uses: inviteArray[i].uses
 					});
 				});
 				server.inviteLinks = newInviteLinks;
@@ -84,10 +85,11 @@ bot.on("guildMemberAdd", (member) => {
 		return;
 	}
 	member.guild.fetchInvites().then((invites) => {
+		let inviteArray = invites.array();
 		for (let i = 0; i < invites.size; i++) {
 			newInviteLinks.push({
-				name: invites[i].code,
-				uses: invites[i].uses
+				name: inviteArray[i].code,
+				uses: inviteArray[i].uses
 			});
 		}
 	});
@@ -118,24 +120,28 @@ bot.on("guildMemberAdd", (member) => {
 });
 
 bot.on("guildCreate", (guild) => {
+	let inviteLinks = [];
 	let index = indexOfObjectByName(servers, guild.name);
 	if (index == -1) {
-		guild.fetchInvites().then((invites) => {
-			for (let i = 0; i < invites.size; i++) {
-				inviteLinks.push({
-					name: invites[i].code,
-					uses: invites[i].uses
-				});
-			}
-		});
-		
 		servers.push({
 			name: guild.name,
 			lastPrefix: "!", prefix: "/",
 			role: "botadmin", discordChannels: [],
-			inviteLinks: inviteLinks
+			inviteLinks: []
 		});
+
 		index = servers.length - 1;
+		
+		guild.fetchInvites().then((invites) => {
+			let inviteArray = invites.array();
+			for (let i = 0; i < invites.size; i++) {
+				inviteLinks.push({
+					name: inviteArray[i].code,
+					uses: inviteArray[i].uses
+				});
+			}
+			servers[index].inviteLinks = inviteLinks;
+		});
 	}
 });
 
@@ -157,22 +163,25 @@ bot.on("message", (message) => {
 	} else {
 		let index = indexOfObjectByName(servers, message.guild.name);
 		if(index == -1) {
-			message.guild.fetchInvites().then((invites) => {
-				for (let i = 0; i < invites.size; i++) {
-					inviteLinks.push({
-						name: invites[i].code,
-						uses: invites[i].uses
-					});
-				}
-			});
-			
 			servers.push({
 				name: message.guild.name,
 				lastPrefix: "!", prefix: "/",
 				role: "botadmin", discordChannels: [],
-				inviteLinks: inviteLinks
+				inviteLinks: []
 			});
+			
 			index = servers.length - 1;
+			
+			message.guild.fetchInvites().then((invites) => {
+				let inviteArray = invites.array();
+				for (let i = 0; i < invites.size; i++) {
+					inviteLinks.push({
+						name: inviteArray[i].code,
+						uses: inviteArray[i].uses
+					});
+				}
+				servers[index].inviteLinks = inviteLinks;
+			});
 		}
 
 		server = servers[index];
