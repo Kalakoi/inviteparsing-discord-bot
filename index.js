@@ -267,6 +267,7 @@ bot.on("message", (message) => {
                     }
                 } 
 			}
+			message.reply(msg);
 		}
 	}
 });
